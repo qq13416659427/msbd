@@ -23,11 +23,8 @@ module.exports = {
   },
   // 插件选项
   pluginOptions: {
-    // style-resources-loader 插件的配置
     'style-resources-loader': {
-      // 处理的是 less
       preProcessor: 'less',
-      // 路径 所有/src/styles/下面的less文件
       patterns: [path.resolve(__dirname, './src/style/*.less')]
     }
   }
