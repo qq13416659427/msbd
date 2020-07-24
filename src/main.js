@@ -8,6 +8,8 @@ import 'normalize.css'
 import Vant from 'vant'
 import 'vant/lib/index.css'
 import 'amfe-flexible'
+import './style/iconfont.less'
+import './style/variable.less'
 Vue.use(Vant)
 Vue.config.productionTip = false
 
