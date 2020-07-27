@@ -1,7 +1,7 @@
 <template>
   <div class="app">
     <router-view></router-view>
-    <van-tabbar v-model="active" :route="true" placeholder>
+    <van-tabbar :route="true" placeholder v-show="$route.meta.showtabbar">
       <van-tabbar-item class="iconfont iconicon_footbar_gs_sel" to="/Company"
         >公司</van-tabbar-item
       >
@@ -21,9 +21,7 @@
 <script>
 export default {
   data () {
-    return {
-      active: 0
-    }
+    return {}
   }
 }
 </script>
@@ -34,15 +32,12 @@ export default {
   height: 100%;
   .van-tabbar {
     height: 54px;
-    // .van-tabbar-item {
-    //   padding-bottom: 26px;
-    // }
     .iconfont {
       font-size: 28px;
-      color: @minor-font-color;
+      color: @minor-font-color; //字体+图标的颜色
     }
     .van-tabbar-item--active {
-      color: @main-color;
+      color: @main-color; //点击后修改的颜色
     }
     .van-tabbar-item__text,
     font {

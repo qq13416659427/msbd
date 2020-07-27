@@ -9,7 +9,9 @@ import 'amfe-flexible'
 import './style/iconfont.less'
 import './style/variable.less'
 import './style/base.less'
+import mmNavBar from './components/mmNavBar.vue'
 Vue.use(Vant)
+Vue.component(mmNavBar.name, mmNavBar)
 Vue.config.productionTip = false
 new Vue({
   router,

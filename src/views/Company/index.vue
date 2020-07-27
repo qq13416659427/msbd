@@ -1,9 +1,18 @@
 <template>
-  <div>Company</div>
+  <div class="company">
+    Company
+    <button @click="search"></button>
+  </div>
 </template>
 
 <script>
-export default {}
+export default {
+  methods: {
+    search () {
+      this.$router.push('/CompanyDetail')
+    }
+  }
+}
 </script>
 
 <style></style>

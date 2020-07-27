@@ -5,11 +5,13 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
+    userInfo: ''
   },
   mutations: {
+    SETUSERINFO (state, userInfo) {
+      state.userInfo = userInfo
+    }
   },
-  actions: {
-  },
-  modules: {
-  }
+  actions: {},
+  modules: {}
 })
