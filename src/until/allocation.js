@@ -6,7 +6,6 @@ const regit = axios.create({
 regit.interceptors.response.use(
   function (response) {
     // 请求成功
-
     return response.data
   },
   function (error) {

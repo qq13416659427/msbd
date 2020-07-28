@@ -1,39 +1,42 @@
 <template>
   <div class="my">
-    <div class="top">
+    <div class="notlog" v-if="userInfo == ''" @click="tologin">
+      点击登录
+    </div>
+    <div class="top" v-if="userInfo">
       <div class="userbox">
         <div class="left">
-          <h3>续命咖啡</h3>
-          <p>面试不求人，我有面试宝典</p>
+          <h3>{{ userInfo.nickname }}</h3>
+          <p>{{ userInfo.intro }}</p>
         </div>
         <div class="right">
-          <img src="@/assets/img/1.jpg" alt="" />
+          <img :src="userInfo.avatar" alt="" @click="getUser" />
         </div>
       </div>
       <ul>
         <li>
-          <p>298</p>
+          <p>{{ userInfo.submitNum }}</p>
           <p>累计答题</p>
         </li>
         <li>
-          <p>98</p>
+          <p>{{ userInfo.collectQuestions.length }}</p>
           <p>收藏题目</p>
         </li>
         <li>
-          <p>198</p>
+          <p>{{ userInfo.errorNum }}</p>
           <p>我的错题</p>
         </li>
         <li>
-          <p>76<span style="font-size:11px">%</span></p>
+          <p>{{ errorPercen }}<span style="font-size:11px">%</span></p>
           <p>正确率</p>
         </li>
       </ul>
     </div>
 
-    <div class="bottom">
+    <div class="bottom" v-if="userInfo">
       <mmcell
         title="我的岗位"
-        value="产品经理"
+        :value="userInfo.position"
         icon="iconfont iconicon_mine_gangwei"
         class="job"
         @click="myCellClick"
@@ -42,69 +45,91 @@
         <h4>面经数据</h4>
         <ul>
           <li>
-            <p>昨日阅读<span>+300</span></p>
-            <h3>17</h3>
+            <p>
+              昨日阅读<span>+{{ userInfo.shareData.comment.yesterday }}</span>
+            </p>
+            <h3>{{ userInfo.shareData.comment.total }}</h3>
             <h5>阅读总数</h5>
           </li>
           <li>
-            <p>昨日阅读<span>+300</span></p>
-            <h3>297</h3>
+            <p>
+              昨日阅读<span>+{{ userInfo.shareData.read.yesterday }}</span>
+            </p>
+            <h3>{{ userInfo.shareData.read.total }}</h3>
             <h5>获赞总数</h5>
           </li>
           <li>
-            <p>昨日阅读<span>+300</span></p>
-            <h3>187</h3>
+            <p>
+              昨日阅读<span>+{{ userInfo.shareData.star.yesterday }}</span>
+            </p>
+            <h3>{{ userInfo.shareData.star.total }}</h3>
             <h5>评论总数</h5>
           </li>
         </ul>
       </div>
       <div class="operation">
-        <mmcell
-          title="我的面经分享"
-          value="123"
-          icon="iconfont iconicon_mine_mianjing"
-        ></mmcell>
-        <mmcell
-          title="我的信息"
-          value="123"
-          icon="iconfont iconicon_mine_xiaoxi"
-        ></mmcell>
-        <mmcell
-          title="收藏的题库"
-          value="123"
-          icon="iconfont iconicon_mine_tikushoucang"
-        ></mmcell>
-        <mmcell
-          title="收藏的企业"
-          value="123"
-          icon="iconfont iconicon_mine_qiyeshoucang"
-        ></mmcell>
-        <mmcell
-          title="我的错题"
-          value="123"
-          icon="iconfont iconicon_mine_cuoti"
-        ></mmcell>
-        <mmcell
-          title="收藏的面试经验"
-          value="123"
-          icon="iconfont iconxingxing2"
-        ></mmcell>
+        <mmcell title="我的面经分享" icon="iconfont iconicon_mine_mianjing">
+          <template #value>
+            123
+          </template>
+        </mmcell>
+        <mmcell title="我的信息" icon="iconfont iconicon_mine_xiaoxi"
+          ><template #value>
+            {{ userInfo.systemMessages }}
+          </template></mmcell
+        >
+        <mmcell title="收藏的题库" icon="iconfont iconicon_mine_tikushoucang"
+          ><template #value>
+            {{ userInfo.collectQuestions.length }}
+          </template></mmcell
+        >
+        <mmcell title="收藏的企业" icon="iconfont iconicon_mine_qiyeshoucang"
+          ><template #value>
+            123
+          </template></mmcell
+        >
+        <mmcell title="我的错题" icon="iconfont iconicon_mine_cuoti"
+          ><template #value>
+            {{ userInfo.errorNum }}
+          </template></mmcell
+        >
+        <mmcell title="收藏的面试经验" icon="iconfont iconxingxing2"
+          ><template #value>
+            {{ userInfo.collectArticles.length }}
+          </template></mmcell
+        >
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import mmcell from './mmcell'
+// import { getInfo } from '@/api/my.js'
+import mmcell from '@/components/mmcell'
+import { mapState } from 'vuex'
+
 export default {
   data () {
-    return {
-      mycell: {
-        share: 1
-      }
+    return {}
+  },
+  created () {},
+  computed: {
+    ...mapState(['userInfo']),
+    errorPercen () {
+      return (
+        ((this.userInfo.submitNum - this.userInfo.errorNum) /
+          this.userInfo.submitNum) *
+        100
+      ).toFixed(1)
     }
   },
   methods: {
+    tologin () {
+      this.$router.push('/login')
+    },
+    getUser () {
+      this.$router.push('/User')
+    },
     myCellClick () {
       console.log('OK')
     }
@@ -118,6 +143,13 @@ export default {
 <style lang="less">
 .my {
   background-color: @border-color;
+  .notlog {
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    color: white;
+    background-color: @main-color;
+  }
   .top {
     position: relative;
     height: 215px;
@@ -186,6 +218,7 @@ export default {
   .bottom {
     position: relative;
     padding: 26px 15px;
+
     .job {
       height: 55px;
       margin: -65px 0 10px 0;

@@ -19,9 +19,24 @@
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+import { getInfo } from '@/api/my.js'
 export default {
   data () {
     return {}
+  },
+  methods: {
+    ...mapMutations(['SETUSERINFO'])
+  },
+  created () {
+    getInfo().then(res => {
+      if (res.code === 401 || res.code === 403) {
+        this.SETUSERINFO('')
+      } else {
+        res.data.avatar = process.env.VUE_APP_URL + res.data.avatar
+        this.SETUSERINFO(res.data)
+      }
+    })
   }
 }
 </script>

@@ -107,6 +107,7 @@ export default {
           this.$toast.success({
             message: '成功'
           })
+          res.data.user.avatar = process.env.VUE_APP_URL + res.data.user.avatar
           saveToken(res.data.jwt)
           this.SETUSERINFO(res.data.user)
           this.$router.push('/Company')
@@ -118,9 +119,7 @@ export default {
         }
       })
     },
-    onClickLeft () {
-      this.$router.push('/My')
-    }
+    onClickLeft () {}
   }
 }
 </script>
@@ -129,12 +128,6 @@ export default {
 .login {
   width: 100%;
   height: 100%;
-  .van-nav-bar__left {
-    padding: 0;
-    .van-icon {
-      color: @black-color;
-    }
-  }
   .Linput {
     width: 100%;
     background-color: @white-color;

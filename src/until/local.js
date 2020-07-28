@@ -3,11 +3,12 @@ const xxx = 'token'
 function saveToken (token) {
   window.localStorage.setItem(xxx, token)
 }
-function getToken (token) {
-  window.localStorage.getItem(xxx, token)
+function getToken () {
+  var x = window.localStorage.getItem(xxx)
+  return x
 }
-function delToken (token) {
-  window.localStorage.removeItem(xxx, token)
+function delToken () {
+  window.localStorage.removeItem(xxx)
 }
 
 export { saveToken, getToken, delToken }

@@ -1,24 +1,26 @@
 <template>
-  <van-nav-bar
-    :left-text="leftText"
-    :right-text="rightText"
-    :title="title"
-    left-arrow
-    placeholder
-    @click-left="onClickLeft"
-    @click-right="onClickRight"
-    fixed
-  >
-    <template #left>
-      <van-icon class="iconfont iconbtn_nav_back" size="44" />
-    </template>
-    <template #title>
-      <slot name="title"></slot>
-    </template>
-    <template #right>
-      <slot name="right"></slot>
-    </template>
-  </van-nav-bar>
+  <div class="mmnavbar">
+    <van-nav-bar
+      :left-text="leftText"
+      :right-text="rightText"
+      :title="title"
+      left-arrow
+      placeholder
+      @click-left="onClickLeft"
+      @click-right="onClickRight"
+      fixed
+    >
+      <template #left>
+        <van-icon class="iconfont iconbtn_nav_back" size="44" />
+      </template>
+      <template #title>
+        <slot name="title"></slot>
+      </template>
+      <template #right>
+        <slot name="right"></slot>
+      </template>
+    </van-nav-bar>
+  </div>
 </template>
 
 <script>
@@ -39,4 +41,13 @@ export default {
 }
 </script>
 
-<style></style>
+<style lang="less">
+.mmnavbar {
+  .van-nav-bar__left {
+    padding: 0;
+    .van-icon {
+      color: @black-color;
+    }
+  }
+}
+</style>

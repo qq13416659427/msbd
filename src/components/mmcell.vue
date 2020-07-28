@@ -6,7 +6,11 @@
       :is-link="true"
       @click="callback"
       class="cell"
+      :to="to"
     >
+      <template #default>
+        <slot name="value"></slot>
+      </template>
       <template #icon>
         <!-- 通过iconfont 的图标来自定义 -->
         <i :class="icon"></i>
@@ -21,7 +25,7 @@
 
 <script>
 export default {
-  props: ['title', 'value', 'icon'],
+  props: ['title', 'value', 'icon', 'to'],
   data () {
     return {}
   },
@@ -38,6 +42,11 @@ export default {
   .cell {
     padding-top: 20px;
     height: 55px;
+    .van-cell__value {
+      overflow: visible;
+      text-align: right;
+      white-space: nowrap;
+    }
   }
 }
 </style>

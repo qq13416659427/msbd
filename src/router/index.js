@@ -6,16 +6,24 @@ import Find from '@/views/Find/index.vue'
 import My from '@/views/My/index.vue'
 import CompanyDetail from '@/views/CompanyDetail/index.vue'
 import Login from '@/views/Login/index.vue'
+import User from '@/views/UserDetail/index.vue'
+import DataChange from '@/components/DataChange.vue'
 Vue.use(VueRouter)
 
 const routes = [
   {
     path: '/',
-    redirect: '/login'
+    redirect: '/Company'
   },
   {
-    path: '/login',
-    component: Login
+    path: '/DataChange',
+    name: 'DataChange',
+    component: DataChange
+  },
+
+  {
+    path: '/User',
+    component: User
   },
   {
     path: '/CompanyDetail',
@@ -35,6 +43,10 @@ const routes = [
     path: '/Find',
     component: Find,
     meta: { showtabbar: true }
+  },
+  {
+    path: '/login',
+    component: Login
   },
   {
     path: '/My',
