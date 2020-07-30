@@ -3,7 +3,13 @@
     <mmNavBar title="我的资料"></mmNavBar>
     <div class="mainCell">
       <div class="photo">
-        <mmcell title="头像">
+        <mmcell
+          title="头像"
+          :to="{
+            path: 'DataChange',
+            query: { title: '修改头像', value: userInfo.avatar }
+          }"
+        >
           <template #value>
             <img :src="userInfo.avatar" alt="" class="photoimg" />
           </template>
@@ -14,70 +20,130 @@
           title="昵称"
           :to="{
             path: 'DataChange',
-            query: { title: '修改昵称', value: userInfo.nickname }
+            query: { title: '修改昵称', value: userInfo.nickname, type: '' }
           }"
           ><template #value> {{ userInfo.nickname }}</template> ></mmcell
         >
-        <mmcell
-          title="性别"
-          :to="{
-            path: 'DataChange',
-            query: { title: '修改性别', value: sex[userInfo.gender] }
-          }"
+        <mmcell title="性别" @click="sexclick"
           ><template #value>{{ sex[userInfo.gender] }}</template></mmcell
         >
-        <mmcell
-          title="地区"
-          :to="{
-            path: 'DataChange',
-            query: { title: '修改地区', value: userInfo.area }
-          }"
-          ><template #value> {{ userInfo.area }}</template></mmcell
+        <mmcell title="地区" @click="pathclick"
+          ><template #value>
+            {{
+              $arealist.county_list[userInfo.area] ||
+                $arealist.city_list[userInfo.area] ||
+                $arealist.province_list[userInfo.area]
+            }}</template
+          ></mmcell
         >
         <mmcell
           title="个人简介"
           :to="{
             path: 'DataChange',
-            query: { title: '修改简介', value: userInfo.intro }
+            query: {
+              title: '修改简介',
+              value: userInfo.intro,
+              type: 'textarea'
+            }
           }"
           ><template #value> {{ userInfo.intro }}</template></mmcell
         >
       </div>
+
       <van-button type="primary" plain size="large" @click="loginOut"
         >退出登录</van-button
       >
     </div>
+    <van-popup v-model="show" position="bottom">
+      <van-picker
+        title="标题"
+        show-toolbar
+        :columns="sex"
+        :default-index="userInfo.gender"
+        @confirm="onConfirm"
+        @cancel="onCancel"
+      />
+    </van-popup>
+    <van-popup v-model="pathshow" position="bottom">
+      <van-area
+        title="标题"
+        :area-list="$arealist"
+        :value="userInfo.area"
+        @confirm="onConpath"
+        @cancel="onCancelpath"
+        :columns-num="2"
+      />
+    </van-popup>
   </div>
 </template>
 
 <script>
-import mmNavBar from '@/components/mmNavBar'
-import mmcell from '@/components/mmcell'
 import { mapState, mapMutations } from 'vuex'
 import { delToken } from '@/until/local.js'
+import { editData } from '@/api/my.js'
 export default {
   data () {
     return {
-      sex: {
-        0: '未知',
-        1: '男',
-        2: '女'
-      }
+      sex: ['未知', '男', '女'],
+      show: false,
+      pathshow: false
     }
   },
   computed: {
     ...mapState(['userInfo'])
   },
-  components: {
-    mmNavBar,
-    mmcell
-  },
+
   methods: {
     ...mapMutations(['SETUSERINFO']),
+    onConfirm (value, index) {
+      const gender = index
+      this.$toast.loading({
+        message: ''
+      })
+      editData({ gender }).then(res => {
+        this.userInfo.gender = index
+        this.$toast.success('')
+        this.show = false
+      })
+    },
+    onCancel () {
+      this.show = false
+    },
+    onConpath (value, index) {
+      console.log(value[1].code)
+      const area = value[1].code
+      this.$toast.loading({
+        message: ''
+      })
+      editData({ area }).then(res => {
+        this.userInfo.area = value[1].code
+        this.$toast.success('')
+        this.pathshow = false
+      })
+    },
+    onCancelpath () {
+      this.pathshow = false
+    },
+    sexclick () {
+      this.show = true
+    },
+    pathclick () {
+      this.pathshow = true
+    },
     loginOut () {
-      delToken()
-      this.SETUSERINFO('')
-      this.$router.push('/My')
+      this.$dialog
+        .confirm({
+          title: '标题',
+          message: '确认要退出吗'
+        })
+        .then(() => {
+          delToken()
+          this.SETUSERINFO('')
+          this.$router.push('/login')
+        })
+        .catch(() => {
+          // on cancel
+        })
     }
   }
 }
@@ -122,6 +188,10 @@ export default {
           .cell {
             border-bottom-left-radius: 4px;
             border-bottom-right-radius: 4px;
+            .van-cell__value {
+              overflow: hidden;
+              text-overflow: ellipsis;
+            }
           }
         }
       }

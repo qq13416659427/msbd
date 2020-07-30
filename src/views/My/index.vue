@@ -1,9 +1,11 @@
 <template>
   <div class="my">
-    <div class="notlog" v-if="userInfo == ''" @click="tologin">
-      点击登录
-    </div>
-    <div class="top" v-if="userInfo">
+    <van-sticky @scroll="scroll">
+      <div v-show="topshow > 50" class="topshow">
+        {{ userInfo.nickname }}
+      </div>
+    </van-sticky>
+    <div class="top">
       <div class="userbox">
         <div class="left">
           <h3>{{ userInfo.nickname }}</h3>
@@ -33,7 +35,7 @@
       </ul>
     </div>
 
-    <div class="bottom" v-if="userInfo">
+    <div class="bottom">
       <mmcell
         title="我的岗位"
         :value="userInfo.position"
@@ -110,17 +112,23 @@ import { mapState } from 'vuex'
 
 export default {
   data () {
-    return {}
+    return {
+      topshow: false
+    }
   },
   created () {},
   computed: {
     ...mapState(['userInfo']),
     errorPercen () {
-      return (
-        ((this.userInfo.submitNum - this.userInfo.errorNum) /
-          this.userInfo.submitNum) *
-        100
-      ).toFixed(1)
+      if (this.userInfo.submitNum === 0) {
+        return 0
+      } else {
+        return (
+          ((this.userInfo.submitNum - this.userInfo.errorNum) /
+            this.userInfo.submitNum) *
+          100
+        ).toFixed(1)
+      }
     }
   },
   methods: {
@@ -132,6 +140,9 @@ export default {
     },
     myCellClick () {
       console.log('OK')
+    },
+    scroll (scrollTop) {
+      this.topshow = scrollTop.scrollTop
     }
   },
   components: {
@@ -149,6 +160,17 @@ export default {
     text-align: center;
     color: white;
     background-color: @main-color;
+  }
+  .topshow {
+    width: 100%;
+    height: 50px;
+    font-size: 18px;
+    font-family: PingFangSC, PingFangSC-Semibold;
+    font-weight: 600;
+    text-align: center;
+    color: #ffffff;
+    line-height: 50px;
+    background: linear-gradient(45deg, #ce0031, #b8002c);
   }
   .top {
     position: relative;

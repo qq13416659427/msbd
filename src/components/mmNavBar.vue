@@ -35,7 +35,12 @@ export default {
       this.$emit('onClickRight')
     },
     onClickLeft () {
-      this.$emit('onClickLeft')
+      // this.$emit('onClickLeft')
+      if (this.$route.query.redirect) {
+        this.$router.push('/Company')
+      } else {
+        this.$router.go(-1)
+      }
     }
   }
 }

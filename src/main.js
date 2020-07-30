@@ -10,9 +10,13 @@ import './style/iconfont.less'
 import './style/variable.less'
 import './style/base.less'
 import mmNavBar from './components/mmNavBar.vue'
+import mmcell from './components/mmcell.vue'
+import area from '@/until/area.js'
 Vue.use(Vant)
 Vue.component(mmNavBar.name, mmNavBar)
+Vue.component(mmcell.name, mmcell)
 Vue.config.productionTip = false
+Vue.prototype.$arealist = area
 new Vue({
   router,
   store,

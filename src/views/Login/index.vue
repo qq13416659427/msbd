@@ -1,6 +1,6 @@
 <template>
   <div class="login">
-    <mmNavBar @onClickLeft="onClickLeft"></mmNavBar>
+    <mmNavBar></mmNavBar>
     <div class="Linput">
       <h1>您好，请登录</h1>
       <van-form @submit="onSubmit" show-error-message ref="form">
@@ -103,23 +103,20 @@ export default {
       })
       toLogin({ mobile: this.mobile, code: this.code }).then(res => {
         console.log(res)
-        if (res.code === 200) {
-          this.$toast.success({
-            message: '成功'
-          })
-          res.data.user.avatar = process.env.VUE_APP_URL + res.data.user.avatar
-          saveToken(res.data.jwt)
-          this.SETUSERINFO(res.data.user)
-          this.$router.push('/Company')
+        this.$toast.success({
+          message: '成功'
+        })
+
+        res.data.user.avatar = process.env.VUE_APP_URL + res.data.user.avatar
+        saveToken(res.data.jwt)
+        this.SETUSERINFO(res.data.user)
+        if (this.$route.query.redirect) {
+          this.$router.push(`${this.$route.query.redirect}`)
         } else {
-          this.$toast.fail({
-            message: '验证码错误'
-          })
-          this.code = ''
+          this.$router.push('/Company')
         }
       })
-    },
-    onClickLeft () {}
+    }
   }
 }
 </script>

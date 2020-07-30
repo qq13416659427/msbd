@@ -15,4 +15,12 @@ function editData (data) {
     headers: { authorization: 'Bearer ' + getToken() }
   })
 }
-export { getInfo, editData }
+function photoup (data) {
+  return regit({
+    url: '/upload',
+    method: 'post',
+    data,
+    headers: { authorization: 'Bearer ' + getToken() }
+  })
+}
+export { getInfo, editData, photoup }

@@ -31,10 +31,10 @@ export default {
   created () {
     getInfo().then(res => {
       if (res.code === 401 || res.code === 403) {
-        this.SETUSERINFO('')
+        this.$store.commit('SETUSERINFO', '')
       } else {
         res.data.avatar = process.env.VUE_APP_URL + res.data.avatar
-        this.SETUSERINFO(res.data)
+        this.$store.commit('SETUSERINFO', res.data)
       }
     })
   }

@@ -8,6 +8,9 @@ import CompanyDetail from '@/views/CompanyDetail/index.vue'
 import Login from '@/views/Login/index.vue'
 import User from '@/views/UserDetail/index.vue'
 import DataChange from '@/components/DataChange.vue'
+import Store from '@/store/index.js'
+import { getInfo } from '@/api/my.js'
+import { getToken, delToken } from '@/until/local.js'
 Vue.use(VueRouter)
 
 const routes = [
@@ -61,7 +64,24 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   console.log('to', to)
   console.log('from', from)
-  next()
+  if (getToken() && Store.state.userInfo === '') {
+    getInfo()
+      .then(res => {
+        res.data.avatar = process.env.VUE_APP_URL + res.data.avatar
+        Store.commit('SETUSERINFO', res.data)
+        next('/My')
+      })
+      .catch(() => {
+        delToken()
+        next(`/login?redirect=${to.fullPath}`)
+      })
+  } else {
+    if (to.path === '/My' && Store.state.userInfo === '') {
+      next(`/login?redirect=${to.fullPath}`)
+    } else {
+      next()
+    }
+  }
 })
 
 export default router

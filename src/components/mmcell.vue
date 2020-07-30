@@ -25,6 +25,7 @@
 
 <script>
 export default {
+  name: 'mmcell',
   props: ['title', 'value', 'icon', 'to'],
   data () {
     return {}
