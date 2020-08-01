@@ -37,7 +37,14 @@ export default {
     onClickLeft () {
       // this.$emit('onClickLeft')
       if (this.$route.query.redirect) {
-        this.$router.push('/Company')
+        if (this.$route.query.redirect === '/My') {
+          this.$router.push('/Company')
+        } else {
+          this.$router.push(`${this.$route.query.redirect}`)
+        }
+      } else if (this.$route.path === '/User') {
+        // 在user组件后退到/my 防止go（-1）乱来
+        this.$router.push('/My')
       } else {
         this.$router.go(-1)
       }

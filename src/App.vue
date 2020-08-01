@@ -45,8 +45,11 @@ export default {
 .app {
   width: 100%;
   height: 100%;
+  .van-tabbar__placeholder {
+    height: 50px !important;
+  }
   .van-tabbar {
-    height: 54px;
+    // height: 54px;
     .iconfont {
       font-size: 28px;
       color: @minor-font-color; //字体+图标的颜色

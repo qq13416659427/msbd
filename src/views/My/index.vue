@@ -38,11 +38,16 @@
     <div class="bottom">
       <mmcell
         title="我的岗位"
-        :value="userInfo.position"
         icon="iconfont iconicon_mine_gangwei"
         class="job"
         @click="myCellClick"
-      ></mmcell>
+        :to="{
+          path: 'DataChange',
+          query: { type: 'position' }
+        }"
+      >
+        <template #value> {{ userInfo.position }}</template> >
+      </mmcell>
       <div class="statistics">
         <h4>面经数据</h4>
         <ul>
@@ -107,7 +112,7 @@
 
 <script>
 // import { getInfo } from '@/api/my.js'
-import mmcell from '@/components/mmcell'
+
 import { mapState } from 'vuex'
 
 export default {
@@ -144,9 +149,6 @@ export default {
     scroll (scrollTop) {
       this.topshow = scrollTop.scrollTop
     }
-  },
-  components: {
-    mmcell
   }
 }
 </script>
@@ -193,11 +195,15 @@ export default {
         }
         p {
           margin: 0;
+          width: 100px;
           font-size: 12px;
           font-family: PingFangSC, PingFangSC-Regular;
           font-weight: 300;
           color: @white-color;
           line-height: 16px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
         }
       }
       .right {

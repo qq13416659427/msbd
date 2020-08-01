@@ -9,6 +9,7 @@ import Login from '@/views/Login/index.vue'
 import User from '@/views/UserDetail/index.vue'
 import DataChange from '@/components/DataChange.vue'
 import Store from '@/store/index.js'
+import sArticle from '@/views/Find/search/sArticle'
 import { getInfo } from '@/api/my.js'
 import { getToken, delToken } from '@/until/local.js'
 Vue.use(VueRouter)
@@ -48,6 +49,10 @@ const routes = [
     meta: { showtabbar: true }
   },
   {
+    path: '/sArticle',
+    component: sArticle
+  },
+  {
     path: '/login',
     component: Login
   },
@@ -69,7 +74,12 @@ router.beforeEach((to, from, next) => {
       .then(res => {
         res.data.avatar = process.env.VUE_APP_URL + res.data.avatar
         Store.commit('SETUSERINFO', res.data)
-        next('/My')
+        if (to.path === '/DataChange') {
+          next(`${to.path}?type=${to.query.type}`)
+          router.go(-1)
+        } else {
+          next(`${to.path}`)
+        }
       })
       .catch(() => {
         delToken()
@@ -77,7 +87,7 @@ router.beforeEach((to, from, next) => {
       })
   } else {
     if (to.path === '/My' && Store.state.userInfo === '') {
-      next(`/login?redirect=${to.fullPath}`)
+      next(`/login?redirect=${from.fullPath}`)
     } else {
       next()
     }

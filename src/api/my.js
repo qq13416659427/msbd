@@ -20,7 +20,9 @@ function photoup (data) {
     url: '/upload',
     method: 'post',
     data,
-    headers: { authorization: 'Bearer ' + getToken() }
+    headers: {
+      authorization: 'Bearer ' + getToken()
+    }
   })
 }
 export { getInfo, editData, photoup }

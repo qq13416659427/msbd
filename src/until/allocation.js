@@ -7,7 +7,7 @@ const regit = axios.create({
 regit.interceptors.response.use(
   function (response) {
     // 请求成功
-    console.log(response)
+
     const code = response.data.code
     if (code === 400 || code === 403) {
       Toast.fail(response.data.message)

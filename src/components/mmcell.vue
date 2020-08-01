@@ -48,6 +48,12 @@ export default {
       text-align: right;
       white-space: nowrap;
     }
+    .iconicon_more {
+      font-size: 14px;
+      font-family: PingFangSC, PingFangSC-Semibold;
+      font-weight: 400;
+      color: @subdominant-font-color;
+    }
   }
 }
 </style>

@@ -7,7 +7,7 @@
           title="头像"
           :to="{
             path: 'DataChange',
-            query: { title: '修改头像', value: userInfo.avatar }
+            query: { type: 'avatar' }
           }"
         >
           <template #value>
@@ -20,9 +20,9 @@
           title="昵称"
           :to="{
             path: 'DataChange',
-            query: { title: '修改昵称', value: userInfo.nickname, type: '' }
+            query: { type: 'nickname' }
           }"
-          ><template #value> {{ userInfo.nickname }}</template> ></mmcell
+          ><template #value> {{ userInfo.nickname }}</template></mmcell
         >
         <mmcell title="性别" @click="sexclick"
           ><template #value>{{ sex[userInfo.gender] }}</template></mmcell
@@ -40,11 +40,7 @@
           title="个人简介"
           :to="{
             path: 'DataChange',
-            query: {
-              title: '修改简介',
-              value: userInfo.intro,
-              type: 'textarea'
-            }
+            query: { type: 'intro' }
           }"
           ><template #value> {{ userInfo.intro }}</template></mmcell
         >
@@ -54,7 +50,7 @@
         >退出登录</van-button
       >
     </div>
-    <van-popup v-model="show" position="bottom">
+    <van-popup v-model="show" position="bottom" @click-overlay="onCancel">
       <van-picker
         title="标题"
         show-toolbar
@@ -62,9 +58,14 @@
         :default-index="userInfo.gender"
         @confirm="onConfirm"
         @cancel="onCancel"
+        ref="sexref"
       />
     </van-popup>
-    <van-popup v-model="pathshow" position="bottom">
+    <van-popup
+      v-model="pathshow"
+      position="bottom"
+      @click-overlay="onCancelpath"
+    >
       <van-area
         title="标题"
         :area-list="$arealist"
@@ -72,6 +73,7 @@
         @confirm="onConpath"
         @cancel="onCancelpath"
         :columns-num="2"
+        ref="pathref"
       />
     </van-popup>
   </div>
@@ -94,34 +96,42 @@ export default {
   },
 
   methods: {
-    ...mapMutations(['SETUSERINFO']),
+    ...mapMutations(['SETUSERINFO', 'SETPROPVALUE']),
+
     onConfirm (value, index) {
       const gender = index
       this.$toast.loading({
         message: ''
       })
       editData({ gender }).then(res => {
-        this.userInfo.gender = index
+        this.SETPROPVALUE({
+          propName: 'gender',
+          value: index
+        })
         this.$toast.success('')
         this.show = false
       })
     },
     onCancel () {
+      this.$refs.sexref.setColumnIndex(0, this.userInfo.gender)
       this.show = false
     },
     onConpath (value, index) {
-      console.log(value[1].code)
       const area = value[1].code
       this.$toast.loading({
         message: ''
       })
       editData({ area }).then(res => {
-        this.userInfo.area = value[1].code
+        this.SETPROPVALUE({
+          propName: 'area',
+          value: value[1].code
+        })
         this.$toast.success('')
         this.pathshow = false
       })
     },
     onCancelpath () {
+      this.$refs.pathref.reset(this.userInfo.area)
       this.pathshow = false
     },
     sexclick () {
@@ -139,7 +149,8 @@ export default {
         .then(() => {
           delToken()
           this.SETUSERINFO('')
-          this.$router.push('/login')
+
+          this.$router.push('/login?redirect=/My')
         })
         .catch(() => {
           // on cancel
